@@ -23,7 +23,7 @@ const { images, exitUrl } = Astro.props
 	<section class="flex">
 		{
 			images.map((el) => (
-				<div class="flex h-screen w-screen shrink-0 flex-col items-end gap-4 p-4">
+				<div class="flex h-svh w-screen shrink-0 flex-col items-end gap-4 p-4">
 					<Image
 						src={el.image}
 						alt={el.alt ?? el.title ?? ''}
