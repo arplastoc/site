@@ -45,7 +45,6 @@ const menuId = nanoid()
 
 <script>
 	import { animate, stagger } from 'motion'
-	import type { MenuIcon } from './_Icon.astro.0.mts'
 
 	customElements.define(
 		'c-menu',
@@ -54,13 +53,11 @@ const menuId = nanoid()
 			#btn: HTMLButtonElement
 			#menu: HTMLElement
 			#menuItems: HTMLElement[]
-			#icon: MenuIcon
 			constructor() {
 				super()
 				this.#btn = this.querySelector('button')!
 				this.#menuItems = Array.from(this.querySelectorAll('li'))
 				this.#menu = this.querySelector('ul')!
-				this.#icon = this.querySelector('c-menu-icon')!
 			}
 
 			connectedCallback() {
@@ -100,10 +97,9 @@ const menuId = nanoid()
 
 			#open() {
 				this.#isOpen = true
-				this.#btn.toggleAttribute('aria-expanded', true)
+				this.#btn.setAttribute('aria-expanded', "true")
 				document.addEventListener('keydown', this.#handleKeydown)
 				document.body.toggleAttribute('data-menu-open', true)
-				this.#icon.open()
 				this.#menu.style.setProperty('display', 'grid')
 				animate(this.#menu, { y: ['-100%', '0%'] })
 				animate(
@@ -114,11 +110,10 @@ const menuId = nanoid()
 			}
 
 			async #close() {
-				this.#icon.close()
+				this.#btn.setAttribute('aria-expanded', "false")
 				await animate(this.#menu, { y: ['0%', '-100%'] }).finished
 				this.#menu.style.setProperty('display', 'none')
 				this.#isOpen = false
-				this.#btn.toggleAttribute('aria-expanded', false)
 				document.body.removeAttribute('data-menu-open')
 				document.removeEventListener('keydown', this.#handleKeydown)
 			}
