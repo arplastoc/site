@@ -120,10 +120,13 @@ export default config({
 							label: 'Évaluation',
 							schema: {
 								rows: fields.array(
-									fields.text({ label: 'Texte', multiline: true }),
+									fields.object({
+										description:fields.text({ label: 'Description', multiline: true, validation:{isRequired:true} }),
+										details:fields.text({ label: 'Compétence', multiline: true }),
+									}),
 									{
 										label: "Critères d'évaluation",
-										itemLabel: (props) => props.value,
+										itemLabel: (props) => props.fields.description.value,
 									},
 								),
 							},
