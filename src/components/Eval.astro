@@ -1,5 +1,6 @@
 ---
 import { slugify } from 'src/libs/slugify.ts'
+import ToggleTip from "src/components/ToggleTip.astro"
 
 export type Props = {
 	rows: {
@@ -33,6 +34,7 @@ const columns = [
 						<tr class="border-t-2 border-black bg-primary-50 md:text-base">
 							<th scope="row" class="px-6 py-4 font-medium text-gray-950">
 								{row.description}
+								{row.details && (<ToggleTip>{row.details}</ToggleTip>)}
 							</th>
 
 							{columns.map((col) => (

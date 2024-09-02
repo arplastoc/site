@@ -1,0 +1,65 @@
+---
+import { nanoid } from "nanoid"
+
+
+const key = nanoid()
+---
+<c-toggletip class="inline-block relative">
+	<button class="px-0.5" aria-label="Afficher plus d'informations" aria-controls={key} aria-expanded="false">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4" aria-hidden="true">
+            <path fill-rule="evenodd" d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0Zm-6 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7.293 5.293a1 1 0 1 1 .99 1.667c-.459.134-1.033.566-1.033 1.29v.25a.75.75 0 1 0 1.5 0v-.115a2.5 2.5 0 1 0-2.518-4.153.75.75 0 1 0 1.061 1.06Z" clip-rule="evenodd" />
+          </svg>          
+	</button>
+	<div class="text-sm rounded-sm max-w-72 p-2 bg-primary-200 z-20 w-max translate-x-2 left-full top-1/2 -translate-y-1/2  absolute" style="display: none;" id={key} data-js="content">
+        <span aria-hidden="true" class="absolute top-1/2 left-0 -translate-x-full -translate-y-1/2 z-30 w-0 h-0 
+        border-t-[6px] border-t-transparent
+        border-r-[8px] border-r-primary-200
+        border-b-[6px] border-b-transparent"></span>
+		<slot />
+	</div>
+</c-toggletip>
+
+<script>
+    customElements.define("c-toggletip",class ToggleTip extends HTMLElement{
+        #btnElement: HTMLButtonElement
+        #contentElement: HTMLElement
+        #isOpen = false
+        constructor(){
+            super()
+            this.#btnElement = this.querySelector("button")!
+            this.#contentElement = this.querySelector("[data-js='content']")!
+        }
+        connectedCallback(){
+            this.#btnElement.addEventListener("click",this.#handleClick)
+        }
+        disconnectedcCallback(){}
+
+        #handleClick = (e:MouseEvent)=>{
+            if(this.#isOpen)this.#close()
+            else this.#open()
+        }
+
+        #open(){
+            this.#contentElement.style.removeProperty("display")
+            this.#btnElement.setAttribute("aria-expanded","true")
+            this.#isOpen = true
+            setTimeout(()=>document.addEventListener("click",this.#handleClickOutside))
+        }
+        
+        #close(){
+            this.#contentElement.style.setProperty("display","none")
+            this.#btnElement.setAttribute("aria-expanded","false")
+            document.removeEventListener("click",this.#handleClickOutside)
+            this.#isOpen = false
+        }
+
+        #handleClickOutside = (e: MouseEvent) => {
+            if(!this.#isOpen)return
+				if (
+						!this.#contentElement.contains(e.target as Node)
+				) {
+					this.#close()
+				}
+			}
+    })
+</script>
