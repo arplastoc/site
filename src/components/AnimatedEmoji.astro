@@ -1,0 +1,16 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+    emoji:string
+}
+
+const { emoji } = Astro.props;
+const imagePath = `/src/content/assets/emojis/${emoji}.webp`
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/content/assets/emojis/*.webp');
+if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/emojis/*.{jpeg,jpg,png,gif}"`);
+---
+<span>
+    <Image src={images[imagePath]()} alt="Un émoji" class="inline size-[1em] not-prose" width={64}/>
+</span>

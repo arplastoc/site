@@ -1,5 +1,8 @@
+import emojis from 'emojis.json'
 import { collection, config, fields, singleton } from '@keystatic/core'
-import { block } from '@keystatic/core/content-components'
+import { block, inline } from '@keystatic/core/content-components'
+
+const emojisOptions = emojis.map(el=>({label:el.emoji,value:el.name}))
 
 const colorsOptions = [
 	{ value: 'slate', label: 'slate' },
@@ -140,6 +143,16 @@ export default config({
 								}),
 							},
 						}),
+						AnimatedEmoji: inline({
+							label: 'Émoji Animé',
+							schema: {
+								emoji: fields.select({
+									label: 'Émoji',
+									options:emojisOptions,
+									defaultValue: emojisOptions[0].value
+								})
+							}
+						})
 					},
 				}),
 			},
